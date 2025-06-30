@@ -139,49 +139,69 @@ export default function Home() {
         </section>
 
         <section className="bg-white p-6 rounded-lg shadow-md">
-          
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">순위</th>
-                <th className="py-2 px-4 border-b">이름</th>
-                <th className="py-2 px-4 border-b">핸디</th>
-                <th className="py-2 px-4 border-b">진행률</th>
-                <th className="py-2 px-4 border-b">승</th>
-                <th className="py-2 px-4 border-b">패</th>
-                <th className="py-2 px-4 border-b">보너스</th>
-                <th className="py-2 px-4 border-b">승점</th>
-              </tr>
-            </thead>
-            <tbody>
-              {playerStats.length > 0 ? (
-                playerStats.map((player) => (
-                  <tr key={player.player_name}>
-                    <td className="py-2 px-4 border-b text-center">{player.rank}</td>
-                    <td className="py-2 px-4 border-b">
-                      <Link href={`/player/${player.player_name}`} className="text-blue-600 hover:underline">
-                        {player.player_name}
-                      </Link>
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">{player.handicap}</td>
-                    <td className={`py-2 px-4 border-b text-center ${player.playerProgressRate >= 70 ? 'font-bold text-red-500' : ''}`}>
-                      {player.playerProgressRate}%
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">{player.wins}</td>
-                    <td className="py-2 px-4 border-b text-center">{player.losses}</td>
-                    <td className="py-2 px-4 border-b text-center">{player.bonus}</td>
-                    <td className="py-2 px-4 border-b text-center">{player.totalScore}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={8} className="text-center py-4 text-gray-500">
-                    데이터 없음
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {/* 데스크톱용 헤더 (모바일에서는 숨김) */}
+          <div className="hidden md:grid md:grid-cols-8 gap-4 py-2 px-4 border-b font-bold text-center">
+            <div>순위</div>
+            <div>이름</div>
+            <div>핸디</div>
+            <div>진행률</div>
+            <div>승</div>
+            <div>패</div>
+            <div>보너스</div>
+            <div>승점</div>
+          </div>
+
+          {/* 모바일용 헤더 (데스크톱에서는 숨김) */}
+          <div className="md:hidden border-b py-2 px-4 font-bold text-center">
+            <div className="grid grid-cols-4 gap-4">
+              <div>순위</div>
+              <div>이름</div>
+              <div>핸디</div>
+              <div>진행률</div>
+            </div>
+            <div className="grid grid-cols-4 gap-4 mt-2">
+              <div></div> {/* 빈 공간 */}
+              <div>승패</div>
+              <div>보너스</div>
+              <div>승점</div>
+            </div>
+          </div>
+
+          {playerStats.length > 0 ? (
+            playerStats.map((player) => (
+              <div key={player.player_name} className="border-b py-4 flex flex-col md:grid md:grid-cols-8 md:gap-4">
+                <div className="grid grid-cols-4 gap-4 md:contents text-center">
+                  <div className="">{player.rank}</div>
+                  <div className="">
+                    <Link href={`/player/${player.player_name}`} className="text-blue-600 hover:underline">
+                      {player.player_name}
+                    </Link>
+                  </div>
+                  <div className="">{player.handicap}</div>
+                  <div className={`${player.playerProgressRate >= 70 ? 'font-bold text-red-500' : ''}`}>
+                    {player.playerProgressRate}%
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 gap-4 md:contents mt-2 md:mt-0 text-center">
+                  {/* 모바일에서만 보이는 승패, 보너스, 승점 */}
+                  <div className="md:hidden"></div> {/* 빈 공간 */}
+                  <div className="md:hidden">{player.wins}:{player.losses}</div>
+                  <div className="md:hidden">{player.bonus}</div>
+                  <div className="md:hidden">{player.totalScore}</div>
+
+                  {/* 데스크톱에서만 보이는 승, 패, 보너스, 승점 */}
+                  <div className="hidden md:block">{player.wins}</div>
+                  <div className="hidden md:block">{player.losses}</div>
+                  <div className="hidden md:block">{player.bonus}</div>
+                  <div className="hidden md:block">{player.totalScore}</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-4 text-gray-500">
+              데이터 없음
+            </div>
+          )}
         </section>
       </main>
     </div>

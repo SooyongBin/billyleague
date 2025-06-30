@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
+    <header className="bg-gray-800 text-white p-4 flex flex-col sm:flex-row items-center sm:justify-between">
       <Link href="/">
         <div className="flex items-center space-x-2">
           <Image
@@ -18,7 +18,7 @@ export default function Header() {
           <h1 className="text-2xl font-bold">세븐당구클럽</h1>
         </div>
       </Link>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 mt-4 sm:mt-0">
         <Link href="/register-player">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             선수핸디
