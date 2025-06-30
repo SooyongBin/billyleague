@@ -138,7 +138,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-white p-6 rounded-lg shadow-md">
+        <section id="player-stats-section" className="bg-white md:p-6 rounded-lg shadow-md">
           <div className="overflow-x-auto"> {/* Keep overflow-x-auto for horizontal scrolling if content overflows */}
             <table className="min-w-full bg-white">
               <thead>
