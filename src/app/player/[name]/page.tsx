@@ -68,9 +68,9 @@ export default function PlayerHistory() {
           <span className="block md:inline">(승점 {totalScore}점)</span>
         </h1>
 
-        <section className="bg-white p-6 rounded-lg shadow-md">
+        <section id="game-history-section" className="bg-white md:p-6 rounded-lg shadow-md">
           {/* 데스크톱용 헤더 (모바일에서는 숨김) */}
-          <div className="hidden md:grid md:grid-cols-8 gap-4 py-2 px-4 border-b font-bold text-center">
+          <div className="hidden md:grid md:grid-cols-7 gap-4 py-2 px-4 border-b font-bold text-center">
             <div>날짜시간</div>
             <div>상대(핸디)</div>
             <div>승패</div>
@@ -107,7 +107,7 @@ export default function PlayerHistory() {
               const opponentHandicap = opponentPlayer ? opponentPlayer.handicap : "N/A";
 
               return (
-                <div key={game.id} className="border-b py-4 flex flex-col md:grid md:grid-cols-8 md:gap-4 text-center">
+                <div key={game.id} className="border-b py-4 flex flex-col md:grid md:grid-cols-7 md:gap-4 text-center">
                   {/* 첫 번째 줄 */}
                   <div className="grid grid-cols-4 gap-4 md:contents">
                     <div className="bg-gray-100">{new Date(game.played_at).toLocaleString()}</div>
@@ -119,7 +119,7 @@ export default function PlayerHistory() {
                   </div>
                   {/* 두 번째 줄 */}
                   <div className="grid grid-cols-4 gap-4 md:contents mt-2 md:mt-0">
-                    <div></div> {/* 빈 공간 */}
+                    <div className="md:hidden"></div> {/* 빈 공간 */}
                     <div className={`${bonus === 1 ? 'font-bold text-red-500' : ''}`}>
                       {bonus}
                     </div>
