@@ -142,13 +142,7 @@ export default function Home() {
           <div className="overflow-x-auto"> {/* Keep overflow-x-auto for horizontal scrolling if content overflows */}
             <table className="min-w-full bg-white">
               <thead>
-                <tr>
-                  <th className="py-2 px-4 border-b text-center">순위</th>
-                  <th className="py-2 px-4 border-b text-center">이름(핸디)</th> {/* Combined */}
-                  <th className="py-2 px-4 border-b text-center">진행률</th>
-                  <th className="py-2 px-4 border-b text-center">승패</th> {/* Combined */}
-                  <th className="py-2 px-4 border-b text-center">승점</th>
-                </tr>
+                <tr><th className="py-2 px-4 border-b text-center">순위</th><th className="py-2 px-4 border-b text-center">이름(핸디)</th><th className="py-2 px-4 border-b text-center">진행률</th><th className="py-2 px-4 border-b text-center">승패</th><th className="py-2 px-4 border-b text-center">승점</th></tr>
               </thead>
               <tbody>
                 {playerStats.length > 0 ? (
@@ -163,7 +157,7 @@ export default function Home() {
                       <td className={`py-2 px-4 border-b text-center ${player.playerProgressRate >= 70 ? 'font-bold text-red-500' : ''}`}>
                         {player.playerProgressRate}%
                       </td>
-                      <td className="py-2 px-4 border-b text-center">{player.wins}승{player.losses}패</td> {/* Combined wins and losses */}
+                      <td className="py-2 px-4 border-b text-center">{player.wins}승{player.losses}패</td>
                       <td className="py-2 px-4 border-b text-center">{player.totalScore}</td>
                     </tr>
                   ))
