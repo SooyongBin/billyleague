@@ -23,7 +23,7 @@ interface PlayerStat extends Player {
   wins: number;
   losses: number;
   totalPlayerGames: number;
-  playerProgressRate: string | number;
+  playerProgressRate: number;
   totalScore: number;
   bonus: number;
   rank?: number;

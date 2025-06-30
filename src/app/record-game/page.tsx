@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Header from "../../components/Header";
-import { getPlayers, recordGame, Player, getPlayersNotFinishedAllGames, getNonOpponents } from "../../lib/api"; // Player 인터페이스 임포트
+import { recordGame, Player, getPlayersNotFinishedAllGames, getNonOpponents } from "../../lib/api"; // Player 인터페이스 임포트
 
 export default function RecordGame() {
   const [players, setPlayers] = useState<Player[]>([]); // Player[] 타입 사용
