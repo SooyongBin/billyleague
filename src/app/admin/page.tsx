@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
 import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { User, AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 export default function AdminPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -19,7 +19,7 @@ export default function AdminPage() {
     };
     checkUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(session?.user ?? null);
     });
 
