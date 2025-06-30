@@ -64,69 +64,83 @@ export default function PlayerHistory() {
       <Header />
       <main className="container mx-auto p-4">
         <h1 className="text-3xl font-bold text-center my-6">
-          {playerName}({playerHandicap})의 경기 이력(승점 {totalScore}점)
+          <span className="block md:inline">{playerName}({playerHandicap})의 경기 이력</span>
+          <span className="block md:inline">(승점 {totalScore}점)</span>
         </h1>
 
         <section className="bg-white p-6 rounded-lg shadow-md">
-          
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">날짜시간</th>
-                <th className="py-2 px-4 border-b">상대</th>
-                <th className="py-2 px-4 border-b">핸디</th>
-                <th className="py-2 px-4 border-b">승패</th>
-                <th className="py-2 px-4 border-b">내역</th>
-                <th className="py-2 px-4 border-b">보너스</th>
-                <th className="py-2 px-4 border-b">승점</th>
-                <th className="py-2 px-4 border-b">삭제</th>
-              </tr>
-            </thead>
-            <tbody>
-              {playerGames.length > 0 ? (
-                playerGames.map((game) => {
-                  const opponentName = game.winner_name === playerName ? game.loser_name : game.winner_name;
-                  const winLoss = game.winner_name === playerName ? "승" : "패";
-                  const bonus = winLoss === "승" ? game.bonus : 0;
-                  const gameScore = (winLoss === "승" ? 3 : 1) + bonus;
+          {/* 데스크톱용 헤더 (모바일에서는 숨김) */}
+          <div className="hidden md:grid md:grid-cols-8 gap-4 py-2 px-4 border-b font-bold text-center">
+            <div>날짜시간</div>
+            <div>상대(핸디)</div>
+            <div>승패</div>
+            <div>내역</div>
+            <div>보너스</div>
+            <div>승점</div>
+            <div>삭제</div>
+          </div>
 
-                  // 상대방 핸디캡 찾기
-                  const opponentPlayer = allPlayers.find((p: Player) => p.player_name === opponentName);
-                  const opponentHandicap = opponentPlayer ? opponentPlayer.handicap : "N/A";
+          {/* 모바일용 헤더 (데스크톱에서는 숨김) */}
+          <div className="md:hidden border-b py-2 px-4 font-bold text-center">
+            <div className="grid grid-cols-4 gap-4">
+              <div>날짜시간</div>
+              <div>상대(핸디)</div>
+              <div>승패</div>
+              <div>내역</div>
+            </div>
+            <div className="grid grid-cols-4 gap-4 mt-2">
+              <div></div> {/* 빈 공간 */}
+              <div>보너스</div>
+              <div>승점</div>
+              <div>삭제</div>
+            </div>
+          </div>
 
-                  return (
-                    <tr key={game.id}>
-                      <td className="py-2 px-4 border-b text-center">{new Date(game.played_at).toLocaleString()}</td>
-                      <td className="py-2 px-4 border-b text-center">{opponentName}</td>
-                      <td className="py-2 px-4 border-b text-center">{opponentHandicap}</td>
-                      <td className={`py-2 px-4 border-b text-center ${winLoss === '승' ? 'font-bold text-red-500' : ''}`}>
-                        {winLoss}
-                      </td>
-                      <td className="py-2 px-4 border-b text-center">{game.score}</td>
-                      <td className={`py-2 px-4 border-b text-center ${bonus === 1 ? 'font-bold text-red-500' : ''}`}>
-                        {bonus}
-                      </td>
-                      <td className="py-2 px-4 border-b text-center">{gameScore}</td>
-                      <td className="py-2 px-4 border-b text-center">
-                        <button
-                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
-                          onClick={() => handleDeleteGame(game.id)}
-                        >
-                          삭제
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={8} className="text-center py-4 text-gray-500">
-                    경기 이력이 없습니다.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          {playerGames.length > 0 ? (
+            playerGames.map((game) => {
+              const opponentName = game.winner_name === playerName ? game.loser_name : game.winner_name;
+              const winLoss = game.winner_name === playerName ? "승" : "패";
+              const bonus = winLoss === "승" ? game.bonus : 0;
+              const gameScore = (winLoss === "승" ? 3 : 1) + bonus;
+
+              const opponentPlayer = allPlayers.find((p: Player) => p.player_name === opponentName);
+              const opponentHandicap = opponentPlayer ? opponentPlayer.handicap : "N/A";
+
+              return (
+                <div key={game.id} className="border-b py-4 flex flex-col md:grid md:grid-cols-8 md:gap-4 text-center">
+                  {/* 첫 번째 줄 */}
+                  <div className="grid grid-cols-4 gap-4 md:contents">
+                    <div className="bg-gray-100">{new Date(game.played_at).toLocaleString()}</div>
+                    <div>{opponentName}({opponentHandicap})</div>
+                    <div className={`${winLoss === '승' ? 'font-bold text-red-500' : ''}`}>
+                      {winLoss}
+                    </div>
+                    <div>{game.score}</div>
+                  </div>
+                  {/* 두 번째 줄 */}
+                  <div className="grid grid-cols-4 gap-4 md:contents mt-2 md:mt-0">
+                    <div></div> {/* 빈 공간 */}
+                    <div className={`${bonus === 1 ? 'font-bold text-red-500' : ''}`}>
+                      {bonus}
+                    </div>
+                    <div>{gameScore}</div>
+                    <div>
+                      <button
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
+                        onClick={() => handleDeleteGame(game.id)}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-4 text-gray-500">
+              경기 이력이 없습니다.
+            </div>
+          )}
         </section>
       </main>
     </div>
