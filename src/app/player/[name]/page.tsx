@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Header from "../../../components/Header";
-import { getPlayerGames, deleteGame, getPlayers, Player, Game } from "../../../lib/api";
+import { getPlayerGames, deleteGame, getPlayers, Player, Game, isAdmin } from "../../../lib/api";
 import { useParams } from "next/navigation";
 
 export default function PlayerHistory() {
@@ -12,6 +12,7 @@ export default function PlayerHistory() {
   const [playerGames, setPlayerGames] = useState<Game[]>([]);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   const fetchPlayerDetails = useCallback(async () => {
     setLoading(true);
@@ -26,6 +27,8 @@ export default function PlayerHistory() {
     // 날짜시간 기준으로 정렬
     games.sort((a, b) => new Date(a.played_at).getTime() - new Date(b.played_at).getTime());
     setPlayerGames(games);
+    const adminStatus = await isAdmin();
+    setIsUserAdmin(adminStatus);
     setLoading(false);
   }, [playerName]);
 
@@ -70,14 +73,14 @@ export default function PlayerHistory() {
 
         <section id="game-history-section" className="bg-white md:p-6 rounded-lg shadow-md">
           {/* 데스크톱용 헤더 (모바일에서는 숨김) */}
-          <div className="hidden md:grid md:grid-cols-7 gap-4 py-2 px-4 border-b font-bold text-center">
+          <div className={`hidden md:grid ${isUserAdmin ? 'md:grid-cols-7' : 'md:grid-cols-6'} gap-4 py-2 px-4 border-b font-bold text-center`}>
             <div>날짜시간</div>
             <div>상대(핸디)</div>
             <div>승패</div>
             <div>내역</div>
             <div>보너스</div>
             <div>승점</div>
-            <div>삭제</div>
+            {isUserAdmin && <div>삭제</div>}
           </div>
 
           {/* 모바일용 헤더 (데스크톱에서는 숨김) */}
@@ -92,7 +95,7 @@ export default function PlayerHistory() {
               <div></div> {/* 빈 공간 */}
               <div>보너스</div>
               <div>승점</div>
-              <div>삭제</div>
+              {isUserAdmin && <div>삭제</div>}
             </div>
           </div>
 
@@ -107,7 +110,7 @@ export default function PlayerHistory() {
               const opponentHandicap = opponentPlayer ? opponentPlayer.handicap : "N/A";
 
               return (
-                <div key={game.id} className="border-b py-4 flex flex-col md:grid md:grid-cols-7 md:gap-4 text-center">
+                <div key={game.id} className={`border-b py-4 flex flex-col md:grid ${isUserAdmin ? 'md:grid-cols-7' : 'md:grid-cols-6'} md:gap-4 text-center`}>
                   {/* 첫 번째 줄 */}
                   <div className="grid grid-cols-4 gap-4 md:contents">
                     <div className="bg-gray-100">{new Date(game.played_at).toLocaleString()}</div>
@@ -124,14 +127,16 @@ export default function PlayerHistory() {
                       {bonus}
                     </div>
                     <div>{gameScore}</div>
-                    <div>
-                      <button
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
-                        onClick={() => handleDeleteGame(game.id)}
-                      >
-                        삭제
-                      </button>
-                    </div>
+                    {isUserAdmin && (
+                      <div>
+                        <button
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-sm"
+                          onClick={() => handleDeleteGame(game.id)}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

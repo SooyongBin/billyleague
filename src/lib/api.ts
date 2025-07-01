@@ -1,4 +1,6 @@
-import { supabase } from "./supabase";
+import { createClient } from "./supabase/client";
+
+const supabase = createClient();
 
 export interface Player {
   player_name: string;
@@ -33,6 +35,7 @@ export async function addPlayer(playerName: string, handicap: number) {
   const { data, error } = await supabase.from("player_handicap").insert([{ player_name: playerName, handicap: handicap }]);
   if (error) {
     console.error("Error adding player:", error);
+    alert("선수 추가에 실패했습니다. 이미 존재하는 선수일 수 있습니다.");
     return null;
   }
   return data;
@@ -112,7 +115,7 @@ export async function getOpponents(playerName: string): Promise<string[]> {
   }
 
   const opponents = new Set<string>();
-  data.forEach((game) => {
+  data.forEach((game: { winner_name: string; loser_name: string }) => {
     if (game.winner_name === playerName) {
       opponents.add(game.loser_name);
     } else if (game.loser_name === playerName) {
@@ -159,4 +162,9 @@ export async function getNonOpponents(playerName: string): Promise<Player[]> {
   );
 
   return nonOpponents;
+}
+
+export async function isAdmin(): Promise<boolean> {
+  const { data: { session } } = await supabase.auth.getSession();
+  return !!session;
 }
